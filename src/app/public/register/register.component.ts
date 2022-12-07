@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environment/environment';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -15,11 +14,11 @@ export class RegisterComponent {
   password = '';
   passwordConfirm = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   submit(): void {
-    this.http
-      .post(`${environment.api}/register`, {
+    this.authService
+      .register({
         first_name: this.firstName,
         last_name: this.lastName,
         email: this.email,

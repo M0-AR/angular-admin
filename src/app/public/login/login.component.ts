@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { environment } from 'src/environment/environment';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +11,11 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   form: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, private router: Router) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.form = this.formBuilder.group({
       email: '',
       password: '',
@@ -20,10 +23,7 @@ export class LoginComponent {
   }
 
   submit(): void {
-    this.http
-      .post(`${environment.api}/login`, this.form.getRawValue(), {
-        withCredentials: true,
-      })
+    this.authService.login(this.form.getRawValue())
       .subscribe(() => this.router.navigate(['/']));
   }
 }
