@@ -12,4 +12,10 @@ export class NavComponent {
   constructor(private authService: AuthService) {
     this.authService.user().subscribe((user) => (this.user = user));
   }
+
+  logout(): void {
+    this.authService.logout().subscribe(() => {
+      console.log("success");
+    });
+  }
 }
