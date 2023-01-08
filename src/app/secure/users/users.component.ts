@@ -5,17 +5,33 @@ import { User } from 'src/app/interfaces/user';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css'],
 })
 export class UsersComponent {
   users: User[] = [];
+  page = 1;
+  last_page: number | undefined;
 
   constructor(private userService: UserService) {
-    this.userService.all().subscribe(
-      (res: any) => {
-        this.users = res.data;
-      }
-    );
+    this.load();
   }
 
+  load(): void {
+    this.userService.all(this.page).subscribe((res: any) => {
+      this.users = res.data;
+      this.last_page = res.meta.last_page;
+    });
+  }
+
+  next(): void {
+    if (this.page === this.last_page) return;
+    this.page++;
+    this.load();
+  }
+
+  prev(): void {
+    if (this.page === 1) return;
+    this.page--;
+    this.load();
+  }
 }
